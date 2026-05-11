@@ -1,0 +1,254 @@
+{
+  "name": "Sunday Telegram Assistant",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": ["message"],
+        "additionalFields": {}
+      },
+      "id": "trigger-telegram",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [240, 400],
+      "webhookId": "sunday-telegram-trigger"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "whitelist-check",
+              "leftValue": "={{ $json.message.from.id }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "if-whitelist",
+      "name": "IF Whitelisted User",
+      "notes": "Replace rightValue with your Telegram user id (find via @userinfobot).",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [460, 400]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "is-voice",
+                    "leftValue": "={{ $json.message.voice }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "object",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "voice"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "is-text",
+                    "leftValue": "={{ $json.message.text }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "text"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "switch-voice-text",
+      "name": "Switch Voice or Text",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [680, 400]
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.voice.file_id }}"
+      },
+      "id": "telegram-get-file",
+      "name": "Telegram Get File",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [900, 280]
+    },
+    {
+      "parameters": {
+        "authentication": "privateKey",
+        "resource": "command",
+        "operation": "execute",
+        "command": "=/home/<pi-user>/sunday/scripts/voice-to-text.sh \"{{ $json.result.file_path }}\"",
+        "cwd": "/home/<pi-user>"
+      },
+      "id": "ssh-whisper",
+      "name": "SSH Whisper",
+      "notes": "Replace <pi-user> with the Pi's username before importing.",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [1120, 280]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "msg-from-voice",
+              "name": "userMessage",
+              "value": "={{ $json.stdout }}",
+              "type": "string"
+            },
+            {
+              "id": "chatid-from-voice",
+              "name": "chatId",
+              "value": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-from-voice",
+      "name": "Set Voice Result",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1340, 280]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "msg-from-text",
+              "name": "userMessage",
+              "value": "={{ $json.message.text }}",
+              "type": "string"
+            },
+            {
+              "id": "chatid-from-text",
+              "name": "chatId",
+              "value": "={{ $json.message.chat.id }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-from-text",
+      "name": "Set Text Direct",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [900, 520]
+    },
+    {
+      "parameters": {
+        "authentication": "privateKey",
+        "resource": "command",
+        "operation": "execute",
+        "command": "=/home/<pi-user>/sunday/scripts/claude-respond.sh \"b64:{{ Buffer.from($('Telegram Trigger').item.json.message.text || ' ').toString('base64') }}\"",
+        "cwd": "/home/<pi-user>/sunday"
+      },
+      "id": "ssh-claude",
+      "name": "SSH Claude",
+      "notes": "Replace <pi-user> with the Pi's username before importing.",
+      "type": "n8n-nodes-base.ssh",
+      "typeVersion": 1,
+      "position": [1560, 400]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $('SSH Claude').item.json.stdout || 'Sorry — empty reply from Claude.' }}",
+        "additionalFields": {}
+      },
+      "id": "telegram-send-reply",
+      "name": "Telegram Send Reply",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [1780, 400]
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [[{"node": "IF Whitelisted User", "type": "main", "index": 0}]]
+    },
+    "IF Whitelisted User": {
+      "main": [
+        [{"node": "Switch Voice or Text", "type": "main", "index": 0}],
+        []
+      ]
+    },
+    "Switch Voice or Text": {
+      "main": [
+        [{"node": "Telegram Get File", "type": "main", "index": 0}],
+        [{"node": "Set Text Direct", "type": "main", "index": 0}]
+      ]
+    },
+    "Telegram Get File": {
+      "main": [[{"node": "SSH Whisper", "type": "main", "index": 0}]]
+    },
+    "SSH Whisper": {
+      "main": [[{"node": "Set Voice Result", "type": "main", "index": 0}]]
+    },
+    "Set Voice Result": {
+      "main": [[{"node": "SSH Claude", "type": "main", "index": 0}]]
+    },
+    "Set Text Direct": {
+      "main": [[{"node": "SSH Claude", "type": "main", "index": 0}]]
+    },
+    "SSH Claude": {
+      "main": [[{"node": "Telegram Send Reply", "type": "main", "index": 0}]]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "",
+  "id": "sunday-telegram-assistant",
+  "meta": {},
+  "tags": []
+}

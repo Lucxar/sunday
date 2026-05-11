@@ -1,0 +1,22 @@
+# Normalize line endings so the vault works on Windows, macOS and Linux.
+* text=auto eol=lf
+
+# Markdown is text
+*.md text eol=lf
+
+# Shell scripts must use LF
+*.sh text eol=lf
+
+# JSON / YAML
+*.json text eol=lf
+*.yml  text eol=lf
+*.yaml text eol=lf
+
+# Binary assets
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.pdf binary
+*.mp4 binary
+*.mp3 binary

@@ -1,0 +1,49 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor / IDE
+.idea/
+.vscode/
+*.swp
+*~
+
+# Obsidian — workspace state is per-machine, regenerated on open
+.obsidian/workspace
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/graph.json
+.obsidian/cache
+.obsidian/.obsidian/
+
+# Claude Code local state (per-machine, may contain permissions/secrets)
+.claude/
+
+# Media (raw/ may accumulate large binaries — keep them local unless you have LFS)
+*.mp4
+*.mkv
+*.webm
+*.mov
+*.mp3
+*.wav
+*.flac
+*.m4a
+*.ogg
+*.oga
+
+# Node / tooling
+node_modules/
+dist/
+build/
+.env
+.env.local
+
+# Personal preferences — NEVER commit this in the public template repo.
+# If you fork Sunday for your own use, remove this line so your prefs get tracked
+# in YOUR private fork.
+docs/personal-preferences.md
+
+# Local secrets that scripts may read
+.telegram-bot-token
+.telegram-bot-allowed-ids
