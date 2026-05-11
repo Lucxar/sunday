@@ -1,4 +1,4 @@
-# Sunday — A Personal Assistant Vault Template
+# Sunday - Your Personal AI Assistant who never forgets
 
 **Sunday** is a ready-to-fork template for building an LLM-maintained second brain. You bring an [Obsidian](https://obsidian.md) vault, [Claude Code](https://docs.claude.com/en/docs/claude-code) (or any agent that reads `CLAUDE.md` / `AGENTS.md`), and your own raw material. Sunday gives you the **schema**, the **workflows**, the **templates**, and the **integrations** so you can start using the assistant the same day you clone the repo.
 
