@@ -10,6 +10,36 @@ It works for your job, your business, your studies, your hobbies, your shopping 
 
 ---
 
+## Runs on your AI subscription — zero API tokens
+
+Sunday is built on top of **Claude Code** and uses **your existing AI subscription** (Claude Pro, Max, Team — or any other LLM you wire up: GPT, Gemini, local Llama, OpenRouter, all fair game). **No API tokens. No per-call billing. No surprise invoices.** You pay the flat €20–€100/month plan you probably already have, and Sunday uses it as much as you want.
+
+That changes the maths. With token-billed APIs a serious second brain — daily ingests, voice messages, recurring lints, long synthesis chats — racks up real money fast. With a subscription, the marginal cost of one more thought, one more transcript, one more late-night question is **zero**. Use it like a person, not like a meter.
+
+---
+
+## The killer feature: chat with Sunday from anywhere via Telegram
+
+Sunday's most addictive form is a **private Telegram bot** wired to a **Raspberry Pi** (or any always-on machine — an old laptop, a mini-PC, a home server). Once it's running:
+
+1. **You text or voice-message** your private Telegram bot — from the bus, the kitchen, a walk, the shower.
+2. **The Pi receives it**, transcribes the voice locally with `whisper.cpp` (no audio ever leaves your house), and hands the message to Claude Code inside your vault.
+3. **Claude triages it**, files it into the right folder, cross-links the right people / projects / topics, updates the wiki — and **replies in the same Telegram chat** to confirm or ask a follow-up.
+4. **It can take real action.** With your Google Calendar connected, it schedules events directly (*"Remind me Friday 3pm to call Heinrich about the audit."*). With Gmail connected, it drafts and sends mails on your behalf (*"Reply to mum's last mail — yes, I'll be there Sunday."*). With GitHub or Drive connected, the surface widens further.
+
+You stop sitting at a keyboard to "use" your assistant. It becomes a chat partner that *does things* — files notes, sets reminders, sends messages, looks up what you said three months ago — all backed by a markdown vault that grows with you and that you own end-to-end.
+
+> **Cost:** ~€165 one-time for a Raspberry Pi 5. **Recurring:** €0 — it just talks to your existing Claude subscription. No cloud middleware, no n8n, no Docker, no public endpoint.
+
+**Setup, in order:**
+- 📡 [`docs/setup/raspberry-pi.md`](docs/setup/raspberry-pi.md) — turn a Pi 5 into a 24/7 Claude Code host, reachable from anywhere via Tailscale.
+- 💬 [`docs/setup/telegram-voice.md`](docs/setup/telegram-voice.md) — wire a Telegram bot to the Pi with bash + systemd. Text + voice both work.
+- 🤖 [`docs/setup/pi-handoff-prompt.md`](docs/setup/pi-handoff-prompt.md) — a reusable prompt you can hand to another agent (or a friend with SSH) to do the whole Pi setup *for* you. Comes back done.
+
+Don't have a Pi? Sunday also works as a plain Obsidian vault you talk to via `claude` in your terminal — see the [Quick start](#quick-start-5-minutes) below.
+
+---
+
 ## What you can do with Sunday on day one
 
 - **Dump a thought, any thought** — text, voice, a link, a half-sentence — and forget about it.
@@ -27,6 +57,16 @@ It works for your job, your business, your studies, your hobbies, your shopping 
 
 - **Track everything you watch and read.**
   Drop in a YouTube link or an article URL. Sunday downloads the transcript, writes a one-page summary, integrates the new findings into your existing topic pages, flags contradictions to what you read last month.
+
+- **Schedule directly into your calendar.**
+  > *"Block 90 minutes Friday afternoon for the workshop prep, and book the dentist sometime in the next two weeks."*
+
+  With Google Calendar connected, Sunday creates the event, picks a free slot, and confirms.
+
+- **Have Sunday write the email for you.**
+  > *"Reply to Heinrich saying the audit quote is coming Tuesday, polite but short."*
+
+  With Gmail connected, Sunday drafts in your voice, you approve, it sends.
 
 - **Don't worry about structure.** Sunday has six well-defined workflows (capture, triage, ingest, query, lint, refactor) baked into a schema the AI follows on every action. You don't think about taxonomy; the assistant does.
 
@@ -101,13 +141,15 @@ Sunday's defaults are opinionated examples. You are expected to adapt them.
 
 ## Power-ups (optional)
 
-You don't need any of this. Sunday works fine as a plain Obsidian vault you talk to via the Claude Code CLI. But if you want the full setup:
+The full **Pi + Telegram + Whisper** stack is the killer setup — see [the section above](#the-killer-feature-chat-with-sunday-from-anywhere-via-telegram) for the pitch and the three setup docs.
 
-- **[`docs/setup/raspberry-pi.md`](docs/setup/raspberry-pi.md)** — turn a Pi 5 into a 24/7 Claude Code host. Reachable from anywhere via Tailscale and the Anthropic mobile app. One-time ~€165 hardware, no recurring cloud bill, no API tokens — runs on your Pro/Max plan.
-- **[`docs/setup/telegram-voice.md`](docs/setup/telegram-voice.md)** — text or voice messages to a Telegram bot, transcribed locally with `whisper.cpp` on the Pi, answered by Sunday. Pure bash + systemd — no n8n, no Docker, no public endpoint. Audio never leaves your house.
-- **[`docs/setup/pi-handoff-prompt.md`](docs/setup/pi-handoff-prompt.md)** — a reusable prompt you can hand to another agent (or a friend with SSH) to do the Pi setup *for* you. Comes back done.
+Other integrations worth turning on once your vault is alive:
 
-Combined: walk somewhere, say "remind me at 3pm to call Heinrich about the audit" into Telegram. Sunday transcribes, schedules, and pings you at 3pm. While doing so it also files your call agenda in `tasks/clients/heinrich-audit-call.md`, with the call wikilinked from his person page. Nothing forgotten.
+- **Google Calendar** (via the official MCP server) — Sunday creates, moves, and answers about events directly.
+- **Gmail** (via the official MCP server) — Sunday drafts replies in your voice, you approve, it sends.
+- **Google Drive / GitHub / Figma / Supabase** — context for documents, code, designs, and databases the assistant should know about.
+
+Combined real-world flow: walk somewhere, say *"remind me at 3pm to call Heinrich about the audit"* into Telegram. Sunday transcribes locally on your Pi, schedules the calendar event, files the call agenda in `tasks/clients/heinrich-audit-call.md`, wikilinks it from Heinrich's person page, and pings you at 3pm. Nothing forgotten, no tab to keep open.
 
 ---
 
