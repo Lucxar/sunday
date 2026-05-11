@@ -1,10 +1,13 @@
 # LLM Wiki — the pattern that Sunday implements
 
-> **Attribution.** This document describes the **LLM Wiki pattern** originally articulated by **Geoffrey Litt** in his public template repo. The text below is a lightly edited version of that original explanation, included here so every Sunday fork carries the rationale for its own design. Sunday is one opinionated instantiation of the pattern — many others are possible. If you want to see the un-edited original or other implementations, search "Geoffrey Litt LLM Wiki" online.
+> **Attribution.** This document describes the **LLM Wiki pattern** originally articulated by **Andrej Karpathy** in a public GitHub Gist (April 2026):
+> <https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f>
+>
+> The text below is a lightly edited version of that original explanation, included here so every Sunday fork carries the rationale for its own design. Sunday is one opinionated instantiation of the pattern — many others exist (see e.g. `Ar9av/obsidian-wiki`, `wac81/LLM_wiki`). All credit for the underlying idea goes to Karpathy; the Sunday-specific schema, workflows, scripts, and integrations in this repo are independent additions.
 
 A pattern for building personal knowledge bases using LLMs.
 
-This is an idea file — it is designed to be copy-pasted to your own LLM Agent (e.g. Claude Code, OpenAI Codex, OpenCode, …). Its goal is to communicate the high-level idea; your agent will build out the specifics in collaboration with you. Sunday's `CLAUDE.md` is one such instantiation.
+This is an idea file — it is designed to be copy-pasted to your own LLM Agent (e.g. Claude Code, OpenAI Codex, OpenCode, …). Its goal is to communicate the high-level idea; your agent will build out the specifics in collaboration with you. Sunday's `CLAUDE.md` is one such instantiation, written by Luca Wiegand / Wega Studios on top of Karpathy's pattern.
 
 ## The core idea
 

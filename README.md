@@ -2,7 +2,7 @@
 
 **Sunday** is a ready-to-fork template for building an LLM-maintained second brain. You bring an [Obsidian](https://obsidian.md) vault, [Claude Code](https://docs.claude.com/en/docs/claude-code) (or any agent that reads `CLAUDE.md` / `AGENTS.md`), and your own raw material. Sunday gives you the **schema**, the **workflows**, the **templates**, and the **integrations** so you can start using the assistant the same day you clone the repo.
 
-Built on the [LLM Wiki pattern](docs/llm-wiki-pattern.md) by Geoffrey Litt — Sunday is one opinionated instantiation of that pattern.
+Built on the [LLM Wiki pattern](docs/llm-wiki-pattern.md) by **Andrej Karpathy** ([original gist](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f), April 2026) — Sunday is one opinionated instantiation of that pattern, contributed by Luca Wiegand / Wega Studios.
 
 ---
 
@@ -130,8 +130,12 @@ Things that should **not** be in PRs: your personal areas, your personal project
 
 ---
 
+## Credits
+
+- The underlying **LLM Wiki pattern** is by **Andrej Karpathy** — see his public gist: <https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f>. All credit for the core idea (raw / wiki / schema three-layer architecture, ingest-query-lint operations, LLM-as-librarian framing) goes to him.
+- The **Sunday-specific implementation** (this repo's schema, workflows, scripts, Pi / Telegram / Whisper integration, templates, cookbook) is by **Luca Wiegand / Wega Studios**, released under MIT for anyone to fork and adapt.
+- Pattern doc included verbatim-ish at [docs/llm-wiki-pattern.md](docs/llm-wiki-pattern.md) so every Sunday fork carries the rationale.
+
 ## Licence
 
 MIT — see [LICENSE](LICENSE).
-
-Built on the [LLM Wiki pattern](docs/llm-wiki-pattern.md) by Geoffrey Litt. Sunday is an independent implementation.

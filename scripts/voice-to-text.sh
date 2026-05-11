@@ -6,7 +6,7 @@
 #
 # Bot token comes from $TELEGRAM_BOT_TOKEN_FILE (chmod 600).
 # Output: only the transcribed text (stdout).
-# Used by: telegram-poll.sh and the n8n Telegram workflow (via SSH bridge).
+# Used by: telegram-poll.sh.
 
 set -euo pipefail
 
